@@ -1,0 +1,82 @@
+/* WebKit (Chrome, Edge, Safari, Opera) */
+* {
+	/* enable painting in nested scrollables too */
+	scrollbar-width: thin; /* harmless for WebKit; useful if viewed in Firefox */
+}
+
+*::-webkit-scrollbar {
+	width: 8px; /* keep it slim */
+	height: 8px; /* for horizontal bars */
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent; /* almost invisible track */
+}
+
+*::-webkit-scrollbar-thumb {
+	background-clip: padding-box;
+	background-color: rgba(0, 0, 0, 0.18); /* subtle default */
+	border-radius: 999px;
+	border: 2px solid transparent; /* creates some breathing room */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.28); /* slightly clearer on hover */
+}
+
+*::-webkit-scrollbar-thumb:active {
+	background-color: rgba(0, 0, 0, 0.36); /* still restrained when dragging */
+}
+
+/* ===== Optional: adapt to dark mode for better contrast ===== */
+@media (prefers-color-scheme: dark) {
+	html {
+		scrollbar-color: color-mix(in oklab, white 35%, transparent) transparent;
+	}
+	*::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.22);
+	}
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(255, 255, 255, 0.32);
+	}
+	*::-webkit-scrollbar-thumb:active {
+		background-color: rgba(255, 255, 255, 0.4);
+	}
+}
+
+/* ===== If you only want to target a specific scroll area ===== */
+/* Replace `.scroll-area` with your element */
+.scroll-area {
+	scrollbar-gutter: stable; /* avoids layout shift when scrollbar appears */
+	overflow: auto;
+}
+
+.auth-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	background: #fff;
+	border: 1px solid #dadce0;
+	border-radius: 4px;
+	white-space: nowrap;
+	padding: 10px 16px;
+	font-size: 14px;
+	font-family: "Roboto", sans-serif;
+	color: #3c4043;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.auth-btn:hover {
+	background: #f7f8f8;
+}
+
+.auth-btn:active {
+	background: #e8e8e8;
+}
+
+.auth-btn .icon {
+	width: 18px;
+	height: 18px;
+}
