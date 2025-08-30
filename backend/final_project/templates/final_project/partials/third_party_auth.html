@@ -1,0 +1,33 @@
+{% extends "final_project/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'final_project/css/social-login.css' %}">
+{% endblock styles %}
+
+{% block content %}
+
+<div class="social-login-container">
+  <!-- Google login -->
+  <a
+    href="http://127.0.0.1:8000/accounts/google/login/?process=login"
+    class="social-login-button"
+  >
+    <img
+      src="{% static 'final_project/google-icon-logo-svgrepo-com.svg' %}"
+      alt="Google"
+    />
+    <span>Sign in with Google</span>
+  </a>
+
+  <!-- GitHub login -->
+  <a href="#" class="social-login-button">
+    <img
+      src="{% static 'final_project/github-icon-1-logo.svg' %}"
+      alt="GitHub"
+    />
+    <span>Sign in with GitHub</span>
+  </a>
+</div>
+
+{% endblock %}

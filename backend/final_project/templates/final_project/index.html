@@ -1,0 +1,144 @@
+{% extends "final_project/base.html" %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'final_project/css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'final_project/css/nav.css' %}">
+{% endblock styles %}
+
+{% block content  %}
+
+    <div class="main-body">
+        <!-- Primary Sidebar -->
+        <aside class="sidebar">
+            <h1 class="logo">Logo</h1>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <a href="?filter=all" class="tab-link">
+                    <span>All Notes</span>
+                </a>
+                <a href="?filter=archived" class="tab-link">
+                    <span>Archived Notes</span>
+                </a>
+            </div>
+
+            <!-- Tags -->
+            <div class="tags">
+                {% for tag in tags %}
+                <a href="/?tag={{ tag }}">
+                    <button class="tag-button">
+                        <span>{{ tag }}</span>
+                    </button>
+                </a>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="page-title">All Notes</h1>
+                <div class="user-controls">
+                    <div class="search-box">
+                        <input
+                            name="q"
+                            type="text"
+                            placeholder="Search by title, content, or tags..."
+                        />
+                    </div>
+                    {% if user.is_authenticated %}
+                    <span class="welcome-text">Welcome, {{ user.username }}</span>
+                    <a href="/logout"><button class="link-button">Logout</button></a>
+                    {% else %}
+                    <a href="/login"><button class="link-button">Login</button></a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Layout -->
+            <section class="layout">
+                <!-- Notes Sidebar -->
+                <div id="notes" class="notes-sidebar">
+                    <a href="/create" class="create-note-button">
+                        + Create New Note
+                    </a>
+
+                    <div class="notes-list">
+                        {% for note in notes %}
+                        <a
+                            href="?filter={{ request.GET.filter }}&note_id={{ note.id }}"
+                            class="note-item {% if note.is_active %}active{% endif %}"
+                        >
+                            <div class="note-details">
+                                <p class="note-title">{{ note.title }}</p>
+                                <div class="note-tags">
+                                    {% for tag in note.tags %}
+                                    <span class="note-tag">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                                <p class="note-date">{{ note.updated_at }}</p>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Editor -->
+                <div id="editor" class="editor">
+                    {% if selected_note %}
+                    <div class="editor-header">
+                        <h1 class="editor-title">{{ selected_note.title }}</h1>
+
+                        <div class="editor-meta">
+                            <div class="meta-item"><span>Tags:</span></div>
+                            <p>
+                                {% for tag in selected_note.tags %}
+                                {{ tag }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                            </p>
+                        </div>
+
+                        <div class="editor-meta">
+                            <div class="meta-item"><span>Last edited:</span></div>
+                            <p>{{ selected_note.updated_at }}</p>
+                        </div>
+                    </div>
+
+                    <form action="/create" method="POST" class="editor-form">
+                        {% csrf_token %}
+                        <textarea name="content">{{ selected_note.content }}</textarea>
+                        <div class="form-buttons">
+                            <button type="submit" class="btn save">Save Note</button>
+                            <button type="reset" class="btn cancel">Cancel</button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <p class="placeholder-text">Select a note to start editing</p>
+                    {% endif %}
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="right-sidebar">
+                    {% if selected_note %}
+                    <form action="/archive?id={{ selected_note.id }}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="sidebar-button archive">
+                            Archive Note
+                        </button>
+                    </form>
+                    <form action="/delete?id={{ selected_note.id }}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="sidebar-button delete">
+                            Delete Note
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </section>
+        </main>
+    </div>
+
+{% endblock %}

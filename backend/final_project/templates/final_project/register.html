@@ -1,0 +1,77 @@
+{% extends "final_project/base.html" %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'final_project/css/auth.css' %}">
+    <link rel="stylesheet" href="{% static 'final_project/css/nav.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-header">
+        <h2>Create a New Account</h2>
+    </div>
+
+    <div class="login-form-wrapper">
+        <!-- Signup Form -->
+        <form action="{% url 'register' %}" method="POST" class="login-form">
+            {% csrf_token %}
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    required
+                    autocomplete="email"
+                    placeholder="Enter your email address"
+                />
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                    autocomplete="new-password"
+                />
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input
+                    id="confirm_password"
+                    type="password"
+                    name="confirm_password"
+                    required
+                    placeholder="Re-enter your password"
+                    autocomplete="new-password"
+                />
+            </div>
+
+            <!-- Submit -->
+            <div>
+                <button type="submit" class="btn primary full-width">
+                    Sign up
+                </button>
+            </div>
+        </form>
+
+        <!-- Footer -->
+        <p class="form-footer">
+            Already have an account?
+            <a href="{% url 'login' %}" class="link">Sign in</a>
+        </p>
+
+        <!-- Third Party Auth Buttons -->
+        {% include 'final_project/partials/third_party_auth.html' %}
+    </div>
+</div>
+{% endblock %}

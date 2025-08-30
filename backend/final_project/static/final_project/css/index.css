@@ -1,0 +1,376 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+
+* {
+	box-sizing: border-box;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Base body styling */
+.app-body {
+	background-color: #f7f7f7; /* replaces bg-gray-100 */
+	color: #1a1a1a; /* replaces text-gray-900 */
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.main-body {
+	display: flex;
+	
+}
+
+/* Content area */
+#content {
+	width: 100%;
+	min-height: 100vh;
+}
+
+/* WebKit (Chrome, Edge, Safari, Opera) */
+* {
+	/* enable painting in nested scrollables too */
+	scrollbar-width: thin; /* harmless for WebKit; useful if viewed in Firefox */
+}
+
+*::-webkit-scrollbar {
+	width: 8px; /* keep it slim */
+	height: 8px; /* for horizontal bars */
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent; /* almost invisible track */
+}
+
+*::-webkit-scrollbar-thumb {
+	background-clip: padding-box;
+	background-color: rgba(0, 0, 0, 0.18); /* subtle default */
+	border-radius: 999px;
+	border: 2px solid transparent; /* creates some breathing room */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.28); /* slightly clearer on hover */
+}
+
+*::-webkit-scrollbar-thumb:active {
+	background-color: rgba(0, 0, 0, 0.36); /* still restrained when dragging */
+}
+
+/* ===== Optional: adapt to dark mode for better contrast ===== */
+@media (prefers-color-scheme: dark) {
+	html {
+		scrollbar-color: color-mix(in oklab, white 35%, transparent) transparent;
+	}
+	*::-webkit-scrollbar-thumb {
+		background-color: rgba(255, 255, 255, 0.22);
+	}
+	*::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(255, 255, 255, 0.32);
+	}
+	*::-webkit-scrollbar-thumb:active {
+		background-color: rgba(255, 255, 255, 0.4);
+	}
+}
+
+/* ===== If you only want to target a specific scroll area ===== */
+/* Replace `.scroll-area` with your element */
+.scroll-area {
+	scrollbar-gutter: stable; /* avoids layout shift when scrollbar appears */
+	overflow: auto;
+}
+
+/* Layout */
+.app-body {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	color: #2d3748;
+	font-family: sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+	border-right: 1px solid #e2e8f0;
+	width: 15rem;
+	min-width: 15rem;
+	max-width: 30rem;
+	padding-top: 1rem;
+}
+
+.logo {
+	font-size: 1.875rem;
+	padding: 1rem;
+	font-weight: bold;
+}
+
+/* Tabs */
+.tabs {
+	margin-top: 1rem;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid #e2e8f0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.tab-link {
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	text-decoration: none;
+	color: inherit;
+	display: flex;
+	align-items: center;
+	transition: background-color 0.2s ease;
+}
+
+.tab-link:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+/* Tags */
+.tags {
+	margin-top: 1rem;
+	padding: 0.75rem 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.tag-button {
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	background: transparent;
+	border: none;
+	text-align: left;
+	cursor: pointer;
+}
+
+.tag-button:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+/* Main Layout */
+.main {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+
+/* Header */
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #e2e8f0;
+	padding: 1rem;
+}
+
+.page-title {
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.user-controls {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.search-box input {
+	width: 20rem;
+	padding: 0.5rem 0.75rem;
+	border: 2px solid #cbd5e0;
+	border-radius: 0.25rem;
+	font-size: 0.875rem;
+}
+
+.search-box input:focus {
+	border-color: #3b82f6;
+	outline: none;
+}
+
+.link-button {
+	color: #2563eb;
+	text-decoration: underline;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+/* Layout grid */
+.layout {
+	display: grid;
+	grid-template-columns: 0.4fr 1fr 0.4fr;
+	height: 100%;
+}
+
+/* Notes sidebar */
+.notes-sidebar {
+	border-right: 1px solid #e2e8f0;
+	padding: 1rem;
+	overflow-y: auto;
+}
+
+.create-note-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #3b82f6;
+	color: white;
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	margin-bottom: 1rem;
+	text-decoration: none;
+}
+
+.create-note-button:hover {
+	background: #1e40af;
+}
+
+.notes-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.note-item {
+	padding: 0.5rem;
+	border-radius: 0.25rem;
+	text-decoration: none;
+	color: inherit;
+	display: block;
+	transition: background-color 0.2s ease;
+}
+
+.note-item:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.note-item.active {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.note-title {
+	font-weight: bold;
+	font-size: 1.125rem;
+}
+
+.note-tags {
+	display: flex;
+	gap: 0.25rem;
+}
+
+.note-tag {
+	background: #6b7280;
+	color: #f1f5f9;
+	padding: 0.25rem 0.5rem;
+	border-radius: 0.25rem;
+	font-size: 0.75rem;
+}
+
+.note-date {
+	font-size: 0.75rem;
+	color: #718096;
+}
+
+/* Editor */
+.editor {
+	padding: 1.25rem;
+}
+
+.editor-header {
+	border-bottom: 1px solid #e2e8f0;
+	padding-bottom: 1rem;
+	margin-bottom: 1rem;
+}
+
+.editor-title {
+	font-size: 1.875rem;
+	font-weight: bold;
+}
+
+.editor-meta {
+	display: flex;
+	gap: 1rem;
+	margin: 0.5rem 0;
+	color: #4a5568;
+}
+
+.meta-item {
+	min-width: 10rem;
+}
+
+.editor-form textarea {
+	width: 100%;
+	height: 16rem;
+	border: 1px solid #cbd5e0;
+	border-radius: 0.25rem;
+	padding: 0.75rem;
+	resize: none;
+}
+
+.form-buttons {
+	margin-top: 1rem;
+	display: flex;
+	gap: 1rem;
+}
+
+.btn {
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	font-weight: 500;
+	cursor: pointer;
+	border: none;
+}
+
+.btn.save {
+	background: #2563eb;
+	color: white;
+}
+
+.btn.save:hover {
+	background: #1e40af;
+}
+
+.btn.cancel {
+	background: #374151;
+	color: #f3f4f6;
+}
+
+.btn.cancel:hover {
+	background: #1f2937;
+}
+
+.placeholder-text {
+	color: #6b7280;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+	border-left: 1px solid #e2e8f0;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.sidebar-button {
+	padding: 0.5rem 1rem;
+	border-radius: 0.25rem;
+	border: 1px solid #e2e8f0;
+	background: white;
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-button.archive:hover {
+	background: #2563eb;
+	color: white;
+}
+
+.sidebar-button.delete:hover {
+	background: #dc2626;
+	color: white;
+}

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.62.1"]
 
 # Application definition
 
-SITE_ID = 2
+SITE_ID = 3
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -160,16 +160,17 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",  # allows allauth
 )
 
-LOGIN_REDIRECT_URL = "http://192.168.62.1:5173/"
-LOGIN_REDIRECT_URL_ALLOWED_HOSTS = ["192.168.62.1:5173"]
-ACCOUNT_ALLOW_REDIRECT_URLS = ["http://192.168.62.1:5173/"]
+AUTH_USER_MODEL = "final_project.User"
 
 
-CORS_ALLOWED_ORIGINS = ["http://192.168.62.1:5173"]
+LOGIN_REDIRECT_URL = "/"
+# LOGIN_REDIRECT_URL_ALLOWED_HOSTS = ["192.168.62.1:5173"]
+# ACCOUNT_ALLOW_REDIRECT_URLS = ["http://192.168.62.1:5173/"]
 
-CSRF_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_DOMAIN = "localhost"
-ACCOUNT_ALLOW_REDIRECT_URLS = ["http://127.0.0.1:5173/"]  # newer allauth versions
+
+# CSRF_COOKIE_SAMESITE = "Lax"
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SAMESITE = "None"
+# CSRF_COOKIE_SECURE = False
+# SESSION_COOKIE_DOMAIN = "localhost"
+# ACCOUNT_ALLOW_REDIRECT_URLS = ["http://127.0.0.1:5173/"]  # newer allauth versions
