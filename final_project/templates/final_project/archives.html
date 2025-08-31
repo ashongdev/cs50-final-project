@@ -16,7 +16,6 @@
 
             {% include 'final_project/partials/tabs.html' %}
 
-
             <!-- Tags -->
             <div class="tags">
                 {% for tag in tags %}
@@ -55,10 +54,6 @@
             <section class="layout">
                 <!-- Notes Sidebar -->
                 <div id="notes" class="notes-sidebar">
-                    <a href="/create" class="create-note-button">
-                        + Create New Note
-                    </a>
-
                     <div class="notes-list">
                         {% for note in notes %}
                         {% comment %} href="?filter={{ request.GET.filter }}&note_id={{ note.id }}" {% endcomment %}
@@ -116,8 +111,8 @@
 
                 <!-- Right Sidebar -->
                 <div class="right-sidebar" style="display: none;">
-                    <button type="submit" class="sidebar-button archive">
-                        Archive Note
+                    <button type="submit" class="sidebar-button unarchive">
+                        Unarchive Note
                     </button>
                     <button type="submit" class="sidebar-button delete">
                         Delete Note

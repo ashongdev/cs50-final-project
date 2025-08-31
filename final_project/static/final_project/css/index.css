@@ -242,6 +242,7 @@
 	color: inherit;
 	display: block;
 	transition: background-color 0.2s ease;
+	cursor: pointer;
 }
 
 .note-item:hover {
@@ -255,6 +256,7 @@
 .note-title {
 	font-weight: bold;
 	font-size: 1.125rem;
+	margin: 0.5rem 0;
 }
 
 .note-tags {

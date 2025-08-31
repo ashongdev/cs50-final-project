@@ -17,6 +17,19 @@
         <form action="{% url 'register' %}" method="POST" class="login-form">
             {% csrf_token %}
 
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    id="username"
+                    type="username"
+                    name="username"
+                    required
+                    autocomplete="username"
+                    placeholder="Enter your username"
+                />
+            </div>
+
             <!-- Email -->
             <div class="form-group">
                 <label for="email">Email address</label>
@@ -55,6 +68,8 @@
                     autocomplete="new-password"
                 />
             </div>
+
+            <p class="error">{{ message }}</p>
 
             <!-- Submit -->
             <div>

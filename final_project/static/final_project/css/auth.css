@@ -5,6 +5,13 @@
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+.error {
+	color: red;
+	font-size: 0.9rem;
+	text-align: center;
+	margin: 0;
+}
+
 /* Login Page */
 .login-container {
 	display: flex;
