@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				response.json().then((result) => {
 					const title = document.querySelector(".editor-title");
 					const updatedAt = document.querySelector(".updated-at");
-					const contentArea = document.querySelector(".content");
 
 					const noteDetails = result.note_details;
 					title.innerHTML = noteDetails.title;
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						}`;
 					});
 
-					contentArea.value = noteDetails.content;
+					tinymce.activeEditor.setContent(noteDetails.content);
 				});
 			});
 		});
@@ -74,6 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			}).then((response) => {
 				if (response.ok) {
 					removeParam("note_id", urlParams);
+
+					setTimeout(() => {
+						window.location.reload();
+						console.log("HIE");
+					}, 100);
 				}
 			});
 		});
@@ -91,6 +95,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			}).then((response) => {
 				if (response.ok) {
 					removeParam("note_id", urlParams);
+
+					setTimeout(() => {
+						window.location.reload();
+						console.log("HIE");
+					}, 100);
 				}
 			});
 		});
@@ -108,6 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			}).then((response) => {
 				if (response.ok) {
 					removeParam("note_id", urlParams);
+
+					setTimeout(() => {
+						window.location.reload();
+						console.log("HIE");
+					}, 100);
 				}
 			});
 		});
@@ -125,6 +139,11 @@ document.addEventListener("DOMContentLoaded", () => {
 			}).then((response) => {
 				if (response.ok) {
 					removeParam("note_id", urlParams);
+
+					setTimeout(() => {
+						window.location.reload();
+						console.log("HIE");
+					}, 100);
 				}
 			});
 		});
@@ -155,13 +174,13 @@ document.addEventListener("DOMContentLoaded", () => {
 			const noteId = urlParams.get("note_id");
 			const title = document.querySelector(".editor-title");
 			const tags = document.querySelector(".meta-tags");
-			const contentArea = document.querySelector(".content");
-			// const saveBtn = document.querySelector(".save")
+			const contentArea = tinymce.activeEditor.getContent("mytextarea");
+			console.log(contentArea);
 
 			fetch(`/save_note/${noteId}`, {
 				method: "POST",
 				body: JSON.stringify({
-					content: contentArea.value,
+					content: contentArea,
 					title: title.innerHTML,
 					tags: tags.innerHTML,
 				}),
@@ -173,9 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			}).then((response) => {
 				if (response.ok) {
 					// alert("Saved");
-					window.location.reload();
-
 					// removeParam("note_id", urlParams);
+
+					setTimeout(() => {
+						window.location.reload();
+						console.log("HIE");
+					}, 100);
 				}
 			});
 

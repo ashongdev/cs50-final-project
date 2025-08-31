@@ -4,16 +4,16 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>{% block title %}My App{% endblock %}</title>
+		<script src="https://cdn.tiny.cloud/1/nf8olg7nhz845ax1pnjg3uw0nsodct916fn99citda00n7fk/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
 
-		{% block styles %}
-		{% endblock styles %}
+		
+
+		{% block styles %} {% endblock styles %}
 	</head>
 	<body class="app-body">
+		<main id="content">{% block content %}{% endblock %}</main>
 
-		<main id="content">
-			{% block content %}{% endblock %}
-		</main>
-
-		{% block script %}{% endblock  %}
+		{% block script %}{% endblock %}
+		<script src="{% static "final_project/js/editor.js" %}"></script>
 	</body>
 </html>
