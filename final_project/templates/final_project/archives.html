@@ -96,14 +96,10 @@
                             </div>
                         </div>
 
-                        <form action="/create" method="POST" class="editor-form">
-                            {% csrf_token %}
+                        <div  class="editor-form">
                             <textarea name="content" class="content"></textarea>
-                            <div class="form-buttons">
-                                <button type="submit" class="btn save">Save Note</button>
-                                <button type="reset" class="btn cancel">Cancel</button>
-                            </div>
-                        </form>
+                            {% csrf_token %}
+                        </div>
                     </div>
 
                     <p class="placeholder-text">Select a note to start editing</p>

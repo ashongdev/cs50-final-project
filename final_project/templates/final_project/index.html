@@ -86,12 +86,28 @@
                 <div id="editor" class="editor">
                     <div class="toggle" style="display: none;">
                         <div class="editor-header">
-                            <h1 class="editor-title"></h1>
+                            <div class="title-cont" style="display: flex; justify-content: start; gap: 1rem; align-items: center;">
+                                <h1 class="editor-title">ddd</h1>
+                                <span class="edit edit-title-btn">Edit</span>
+
+                                <div class="edit-title-cont" style="display: none">
+                                    <input class="edit-title-input">
+                                    <button class="edit-title-save">OK</button>
+                                    <button class="edit-title-cancel">Cancel</button>
+                                </div>
+                            </div>
 
                             <div class="editor-meta">
                                 <div class="meta-item"><span>Tags:</span></div>
                                 <div class="meta-tags">
                                     
+                                </div>
+                                <span class="edit edit-tags-btn">Edit</span>
+
+                                <div class="edit-tags-cont" style="display: none">
+                                    <input class="edit-tags-input">
+                                    <button class="edit-tags-save">OK</button>
+                                    <button class="edit-tags-cancel">Cancel</button>
                                 </div>
                             </div>
 
@@ -101,8 +117,7 @@
                             </div>
                         </div>
 
-                        <form action="/create" method="POST" class="editor-form">
-                            {% csrf_token %}
+                        <form class="editor-form">
                             <textarea name="content" class="content"></textarea>
                             <div class="form-buttons">
                                 <button type="submit" class="btn save">Save Note</button>

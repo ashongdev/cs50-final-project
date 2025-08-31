@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.index, name="index"),
     path("all", views.index, name="index"),
     path("archives", views.archives, name="archives"),
     path("deleted", views.deleted, name="deleted"),
@@ -17,4 +18,5 @@ urlpatterns = [
     path("unarchive_note/<str:note_id>", views.unarchive_note, name="unarchive_note"),
     path("delete_note/<str:note_id>", views.delete_note, name="delete_note"),
     path("restore_note/<str:note_id>", views.restore_note, name="restore_note"),
+    path("save_note/<str:note_id>", views.save_note, name="save"),
 ]

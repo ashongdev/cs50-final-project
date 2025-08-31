@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from dotenv import load_dotenv
@@ -164,13 +164,44 @@ def create_new_note(request):
         return redirect(reverse("login"))
 
 
+@api_view(["POST"])
+def save_note(request, note_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            title = request.data.get("title")
+            tag_input = request.data.get("tags")
+            content = request.data.get("content")
+
+            print(title)
+
+            tags = []
+
+            for word in tag_input.split(","):
+                tags.append(word.strip())
+
+            print(tags)
+            # Delete tags asscociated with that note
+            Tag.objects.filter(note_id=note_id).all().delete()
+            n = Note.objects.filter(id=note_id)
+
+            for tag in tags:
+                t = Tag(note_id=n.last(), tag_name=tag)
+                t.save()
+
+            n.update(content=content, title=title)
+            return redirect(reverse("index"))
+        else:
+            return redirect(reverse("login"))
+    else:
+        return redirect(reverse("login"))
+
+
 @api_view(["POST", "GET"])
 def forgot_password_view(request):
     if request.method == "POST":
         ...
     else:
         return render(request, "final_project/forgot_password.html")
-    ...
 
 
 def forgot_password_page(request):
@@ -180,22 +211,15 @@ def forgot_password_page(request):
 @api_view(["POST", "GET"])
 def login_view(request):
     if request.method == "POST":
-        if request.user.is_authenticated:
-            # Attempt to sign user in
-            username = request.data.get("username")
-            password = request.data.get("password")
-            user = authenticate(request, username=username, password=password)
+        # Attempt to sign user in
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(request, username=username, password=password)
 
-            # Check if authentication successful
-            if user is not None:
-                login(request, user)
-                return redirect(reverse("index"))
-            else:
-                return render(
-                    request,
-                    "final_project/login.html",
-                    {"message": "Invalid username and/or password."},
-                )
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return redirect(reverse("index"))
         else:
             return render(
                 request,
@@ -277,7 +301,7 @@ def register(request):
             if password != confirmation:
                 return render(
                     request,
-                    "network/register.html",
+                    "final_project/register.html",
                     {"message": "Passwords does not match."},
                 )
             else:
@@ -288,12 +312,16 @@ def register(request):
                     print(e)
                     return render(
                         request,
-                        "network/register.html",
+                        "final_project/register.html",
                         {"message": "Username/email already taken."},
                     )
                 else:
-                    login(request, user)
-                return HttpResponse("index")
+                    login(
+                        request,
+                        user,
+                        backend="django.contrib.auth.backends.ModelBackend",
+                    )
+                return redirect(reverse("index"))
         else:
             print("Hssol")
             return redirect(reverse("index"))
