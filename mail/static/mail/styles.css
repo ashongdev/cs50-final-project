@@ -1,0 +1,76 @@
+body {
+	background-color: #f0f2f5;
+}
+textarea {
+	min-height: 400px;
+}
+.email-card {
+	background-color: #f9f9f9;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 16px;
+	margin: 12px 0;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	transition: background-color 0.2s ease;
+	cursor: pointer;
+}
+
+.email-card:hover {
+	background-color: #f1f1f1;
+}
+
+.email-card p {
+	margin: 6px 0;
+	line-height: 1.4;
+}
+
+.email-card p:first-child {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.email-card p:nth-child(3) {
+	color: #555;
+	font-style: italic;
+}
+
+.email-card p:last-child {
+	font-size: 0.85em;
+	color: #999;
+}
+.email-card.unread {
+	background-color: #ffffff;
+}
+
+.email-card.read {
+	background-color: #e6e6e6;
+}
+.email-view button {
+	padding: 8px 16px;
+	margin: 10px 10px 0 0;
+	border: none;
+	border-radius: 5px;
+	font-size: 0.95rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+/* Archive/Unarchive Button */
+.email-view button:first-of-type {
+	background-color: #007bff;
+	color: white;
+}
+
+.email-view button:first-of-type:hover {
+	background-color: #0056b3;
+}
+
+/* Reply Button */
+.email-view button:last-of-type {
+	background-color: #28a745;
+	color: white;
+}
+
+.email-view button:last-of-type:hover {
+	background-color: #1e7e34;
+}

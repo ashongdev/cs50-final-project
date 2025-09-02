@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "final_project",
+    "mail",
     "rest_framework",
     "corsheaders",
     "django.contrib.sites",

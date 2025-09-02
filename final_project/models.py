@@ -6,7 +6,7 @@ class User(AbstractUser):
     pass
 
     def __str__(self):
-        return f"{self.username}, {self.password}"
+        return f"{self.pk}: {self.username}, {self.password} "
 
 
 # Create your models here.
@@ -16,6 +16,13 @@ class Note(models.Model):
     content = models.TextField()
     is_deleted = models.BooleanField(default=False)
     is_archived = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class Code(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    code = models.IntegerField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

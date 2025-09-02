@@ -46,3 +46,19 @@ Use animations and transitions to add a layer of polish to the application
 Build the project out as a full-stack application
 Add user authentication (if building it as a full-stack app)
 Add password reset capabilities
+
+Progress update
+
+For the past few months, I’ve been chasing that “perfect” idea for my CS50 Web final project. Eventually, inspiration struck: a note-taking app. Cliche? Yeah🙄. Simple? Yeah🙄. Until I decided to torture myself by implementing Google OAuth 😭. Honestly, who sent me?
+
+I spent the past week wrestling with authentication. Imagine this: me, React on the frontend, Django on the backend, and Google OAuth standing in the corner, laughing at my pain. Looking back, picking React for this was like bringing a bazooka to a chess game — impressive, but completely unnecessary.
+
+Still, I pushed through. I wrote the entire frontend in React, then hit the OAuth stage. After hopping from one YouTube video to another, I actually got sign-in working 🎉. But then came the dreaded CORS problem: backend holding the cookies, frontend unable to touch them, and I was stuck in developer limbo — like being at a party where the snacks are in the kitchen, but someone locked the door. Basically… cookies I couldn’t eat 🍪💔.
+
+I reached out to friends and other devs for help (big thanks 🙏🏽). Their advice was super useful, and the breakthrough came when I finally switched back to Django’s default templates—like running home after realizing fast food can’t beat mom’s cooking. Along the way, I picked up lessons and concepts I didn’t even know I was missing.
+
+At the end of the day, the biggest lesson was this: sometimes the stack you think will make life easier is the same stack that trips you up. As the saying goes, “Smooth seas never made a skilled sailor.”
+
+Next stage: I need to wrap up the project, submit it, and then wait for the CS50 team to manually review it. Wish me luck👍. If you’ve ever had your own OAuth/CORS horror story, I’d love to hear it!
+
+#CS50 #WebDevelopment #Django #React #OAuth #Python #Programming #LearnByBuilding
