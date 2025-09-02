@@ -8,7 +8,9 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from dotenv import load_dotenv
+from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from mail.models import Email
 
@@ -236,22 +238,54 @@ def generate_code(user):
 @api_view(["POST"])
 def request_code(request):
     email = request.data.get("email")
-    user = User.objects.get(email=email)
 
-    if generate_code(user):
-        return JsonResponse({"message": "Code successfully sent. Check you mailbox"})
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response(
+            {
+                "message": "AN unexpected error occurred.",
+                "email": email,
+                "status": 500,
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
     else:
-        return JsonResponse({"message": "Could not generate code"})
+        if generate_code(user):
+            return Response(
+                {
+                    "message": "Code resent. Check your mail for code",
+                    "email": email,
+                    "status": 200,
+                },
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {
+                    "message": "Could not generate code",
+                    "email": email,
+                    "status": 400,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
 
-@api_view(["POST", "GET"])
-def forgot_password_view(request):
-    if request.method == "POST":
+@api_view(["GET", "POST"])
+def enter_verification_code_view(request):
+    if request.method == "GET":
+        return render(
+            request,
+            "final_project/enter-code.html",
+        )
+    elif request.method == "POST":
         email = request.data.get("email")
         verification_code = request.data.get("code")
 
-        if verification_code:
-            stored_verification_code = Code.objects.get(user=request.user)
+        if verification_code and email:
+            user = User.objects.get(email=email)
+
+            stored_verification_code = Code.objects.get(user=user)
             verification_code = int(verification_code.strip())
 
             # Check if code is past 15 mins
@@ -260,52 +294,67 @@ def forgot_password_view(request):
                 > timedelta(minutes=15)
             )
             if is_expired:
-                return render(
-                    request,
-                    "final_project/forgot_password.html",
+                return Response(
                     {
-                        "message": "Code expired",
+                        "message": "Verification code expired.",
                         "email": email,
-                        "code_sent": True,
-                        "expired": True,
+                        "status": 410,
                     },
+                    status=status.HTTP_410_GONE,
                 )
 
             if stored_verification_code.code == verification_code:
-                return redirect(reverse("set_new_password"))
-            else:
-                return render(
-                    request,
-                    "final_project/forgot_password.html",
+                return Response(
                     {
-                        "message": "Invalid code. Please try again",
-                        "code": verification_code,
-                        "code_sent": True,
-                        "invalid": True,
+                        "message": "Success",
+                        "email": email,
+                        "status": 200,
                     },
+                    status=status.HTTP_200_OK,
                 )
-        else:
+            else:
+                return Response(
+                    {
+                        "message": "Invalid verification code.",
+                        "email": email,
+                        "status": 400,
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+
+@api_view(["POST", "GET"])
+def forgot_password_view(request):
+    if request.method == "POST":
+        email = request.data.get("email")
+
+        if email:
             try:
                 user_found = User.objects.get(email=email)
             except User.DoesNotExist:
-                return render(
-                    request,
-                    "final_project/forgot_password.html",
-                    {"message": "Email not found", "email": email},
+                return Response(
+                    {"message": "Email not found", "email": email, "status": 400},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             else:
                 if user_found:
                     if generate_code(user_found):
-                        return render(
-                            request,
-                            "final_project/forgot_password.html",
-                            {"message": "Check your mail for code", "code_sent": True},
+                        return Response(
+                            {
+                                "message": "Check your mail for code",
+                                "email": email,
+                                "status": 200,
+                            },
+                            status=status.HTTP_200_OK,
                         )
                     else:
-                        return render(
-                            request,
-                            "final_project/forgot_password.html",
-                            {"message": "Could not generate code", "email": email},
+                        return Response(
+                            {
+                                "message": "Could not generate code",
+                                "email": email,
+                                "status": 400,
+                            },
+                            status=status.HTTP_400_BAD_REQUEST,
                         )
     else:
         return render(request, "final_project/forgot_password.html")
@@ -316,28 +365,43 @@ def set_new_password(request):
     if request.method == "GET":
         return render(request, "final_project/set_new_password.html")
     else:
+        email = request.data.get("email")
         password = request.data.get("password")
         confirmation = request.data.get("confirmation")
 
         if password != confirmation:
-            return render(
-                request,
-                "final_project/set_new_password.html",
-                {"error": "Password does not match"},
+            return Response(
+                {
+                    "message": "Passwords does not match",
+                    "email": email,
+                    "status": 400,
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
         else:
             try:
-                user = User.objects.get(username=request.user.username)
+                user = User.objects.get(email=email)
             except User.DoesNotExist:
-                return render(
-                    request,
-                    "final_project/set_new_password.html",
-                    {"error": "Invalid user"},
+                return Response(
+                    {
+                        "message": "User not found",
+                        "email": email,
+                        "status": 404,
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
                 )
             else:
-                user.password = password
+                user.set_password(password)
+                user.save()
 
-                return redirect(reverse("index"))
+                return Response(
+                    {
+                        "message": "Check your mail for code",
+                        "email": email,
+                        "status": 200,
+                    },
+                    status=status.HTTP_200_OK,
+                )
 
 
 @api_view(["POST", "GET"])
@@ -347,6 +411,7 @@ def login_view(request):
         username = request.data.get("username")
         password = request.data.get("password")
         user = authenticate(request, username=username, password=password)
+        print(username, password)  # Same output: test test
 
         # Check if authentication successful
         if user is not None:

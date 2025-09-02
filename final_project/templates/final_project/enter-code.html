@@ -1,0 +1,54 @@
+{% extends "final_project/base.html" %}
+{% load static %} 
+{% block title %}Forgot Password{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'final_project/css/forgot_password.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="forgot-container">
+	<div class="forgot-header">
+		<h2>Reset your password</h2>
+	</div>
+
+	<div class="forgot-form-wrapper">
+		<form class="code-form">
+			{% csrf_token %}
+
+         <input value="{{request.GET.email}}" hidden name="email" id="email">
+      
+         <div class="form-group">
+            <label for="code" id="verification-label">Enter Verification Code</label>
+            <input
+               type="number"
+               id="code"
+               name="code"
+               maxlength="6"
+               required
+               class="code"
+               min="0"
+               max="999999"
+               placeholder="Enter the verification code"
+            />
+         </div>
+
+			<span class="status-msg"></span>
+
+			<div>
+				<button type="submit" class="btn-primary">
+					Verify
+				</button>
+			</div>
+
+         {% comment %} todo: fix opacity issues {% endcomment %}
+         <div class="request-new" style="opacity: 0;">Request New Code</div>
+		</form>
+	</div>
+</div>
+
+    {% block script %}
+        <script src="{% static "final_project/js/forgot_password.js" %}" type="module"></script>
+    {% endblock  %}
+
+{% endblock %}

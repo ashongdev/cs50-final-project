@@ -26,6 +26,9 @@ class Code(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.pk}: {self.code} for {self.user.username} "
+
 
 # class IsArchived(models.Model):
 #     note_id = models.ForeignKey(to=Note, on_delete=models.CASCADE)

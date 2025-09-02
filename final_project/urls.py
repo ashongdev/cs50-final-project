@@ -9,7 +9,12 @@ urlpatterns = [
     path("deleted", views.deleted, name="deleted"),
     path("create", views.create_new_note, name="create"),
     path("login", views.login_view, name="login"),
-    path("forgot-password", views.forgot_password_view, name="forgot_password"),
+    path("forgot_password", views.forgot_password_view, name="forgot_password"),
+    path(
+        "code",
+        views.enter_verification_code_view,
+        name="code",
+    ),
     path("set_new_password", views.set_new_password, name="set_new_password"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
