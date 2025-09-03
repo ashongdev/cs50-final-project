@@ -401,3 +401,58 @@ textarea {
 	background: #dc2626;
 	color: white;
 }
+
+/* ========================= */
+/* Responsive Layout Changes */
+/* ========================= */
+
+/* Tablets (<= 1024px) */
+@media (max-width: 1024px) {
+	.layout {
+		grid-template-columns: 1fr; /* stack all sections */
+	}
+
+	.notes-sidebar {
+		order: 1;
+		border-right: none;
+		border-bottom: 1px solid #e2e8f0;
+	}
+
+	.editor {
+		order: 2;
+	}
+
+	.right-sidebar {
+		order: 3;
+		border-left: none;
+		border-top: 1px solid #e2e8f0;
+		flex-direction: row;
+		justify-content: center;
+		gap: 1rem;
+	}
+}
+
+/* Mobile (<= 640px) */
+@media (max-width: 640px) {
+	.main-body {
+		flex-direction: column; /* sidebar moves on top */
+	}
+
+	.sidebar {
+		width: 100%;
+		min-width: unset;
+		max-width: unset;
+		border-right: none;
+		border-bottom: 1px solid #e2e8f0;
+	}
+
+	.header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+
+	.search-box input {
+		width: 100%; /* full width search bar */
+	}
+}
