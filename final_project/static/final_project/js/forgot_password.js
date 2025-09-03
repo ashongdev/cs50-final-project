@@ -17,8 +17,42 @@ document.addEventListener("DOMContentLoaded", () => {
 		return cookieValue;
 	}
 	const codeForm = document.querySelector(".code-form");
+	const phoneForm = document.querySelector(".phone-form");
 	const statusEl = document.querySelector(".status-msg"); // permanent element
 	const requestBtn = document.querySelector(".request-new");
+
+	phoneForm &&
+		phoneForm.addEventListener("submit", (e) => {
+			e.preventDefault();
+
+			const email = document.getElementById("email").value;
+			const phone = document.getElementById("phone");
+
+			if (/^[0-9]+$/.test(Number(phone.textContent))) {
+				fetch("/phone_number", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRFToken": getCookie("csrftoken"),
+					},
+					credentials: "include",
+					body: JSON.stringify({ email, phone: phone.value }),
+				}).then((response) => {
+					response.json().then((result) => {
+						if (response.status === 200) {
+							window.location.href = `/code?email=${result.email}&phone=${result.phone}`;
+						}
+					});
+				});
+			} else {
+				statusEl.classList.add("error");
+				// statusEl.classList.add("success");
+
+				statusEl.textContent =
+					"Number must be in valid international format";
+				return;
+			}
+		});
 
 	codeForm &&
 		codeForm.addEventListener("submit", (e) => {
@@ -105,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						document.querySelector(".error").innerHTML =
 							result.message;
 					} else {
-						window.location.href = `/code?email=${result.email}`;
+						window.location.href = `/phone_number?email=${result.email}`;
 					}
 				});
 			});

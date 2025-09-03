@@ -1,0 +1,55 @@
+{% extends "final_project/base.html" %}
+{% load static %} 
+{% block title %}Forgot Password{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'final_project/css/forgot_password.css' %}">
+{% endblock styles %}
+
+{% block content %}
+<div class="forgot-container">
+	<div class="forgot-header">
+		<h2>Reset your password</h2>
+	</div>
+
+	<div class="forgot-form-wrapper">
+		<form class="phone-form">
+			{% csrf_token %}
+
+         <input value="{{request.GET.email}}" hidden name="email" id="email">
+      
+         <div class="form-group">
+            <label for="code" id="verification-label">Enter Phone Number</label>
+            <input
+               type="phone"
+               id="phone"
+               name="phone"
+               required
+               class="code"
+               min="0"
+               max="999999"
+               placeholder="Phone (e.g., 2332154535536)"
+            />
+         </div>
+         
+			<span class="status-msg"></span>
+         
+			<div>
+				<button type="submit" class="btn-primary">
+					Continue
+				</button>
+			</div>
+         
+         <span style="font-size: 0.8rem; text-align: center; line-height: 1.2rem color: gray;">
+            Enter phone number in an international format without the leading plus. e.g., 2332154535536
+         </span>
+
+		</form>
+	</div>
+</div>
+
+    {% block script %}
+        <script src="{% static "final_project/js/forgot_password.js" %}" type="module"></script>
+    {% endblock  %}
+
+{% endblock %}

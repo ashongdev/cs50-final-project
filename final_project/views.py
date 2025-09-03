@@ -1,3 +1,4 @@
+import os
 import random
 from datetime import timedelta
 
@@ -12,6 +13,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+# from vonage import Auth, Vonage
+# from vonage_sms import SmsMessage
 from mail.models import Email
 
 from .models import Code, Note, Tag, User
@@ -180,14 +183,11 @@ def save_note(request, note_id):
             tag_input = request.data.get("tags")
             content = request.data.get("content")
 
-            print(title)
-
             tags = []
 
             for word in tag_input.split(","):
                 tags.append(word.strip())
 
-            print(tags)
             # Delete tags asscociated with that note
             Tag.objects.filter(note_id=note_id).all().delete()
             n = Note.objects.filter(id=note_id)
@@ -204,7 +204,11 @@ def save_note(request, note_id):
         return redirect(reverse("login"))
 
 
-def generate_code(user):
+VONAGE_API_KEY = os.getenv("VONAGE_API_KEY")
+VONAGE_API_SECRET = os.getenv("VONAGE_API_SECRET")
+
+
+def generate_code(user, phone):
     num = list("1234567890")
 
     code = ""
@@ -221,6 +225,15 @@ def generate_code(user):
             c = Code(user=user, code=code)
             c.save()
 
+        # todo: Uncomment to send sms
+        # client = Vonage(Auth(api_key=VONAGE_API_KEY, api_secret=VONAGE_API_SECRET))
+        # message = SmsMessage(
+        #     to=phone,
+        #     from_="Notebook",
+        #     text=f"Your verification code is {code}. It will expire in 15 minutes. Do not share this code with anyone.",
+        # )  # type: ignore
+
+        # client.sms.send(message)
         email = Email(
             user=user,
             subject="Your Recovery Code",
@@ -238,6 +251,17 @@ def generate_code(user):
 @api_view(["POST"])
 def request_code(request):
     email = request.data.get("email")
+    phone = request.data.get("phone")
+
+    if not phone or not email:
+        return Response(
+            {
+                "message": "Please provide both email and phone number",
+                "email": email,
+                "status": 400,
+            },
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
     try:
         user = User.objects.get(email=email)
@@ -246,12 +270,13 @@ def request_code(request):
             {
                 "message": "AN unexpected error occurred.",
                 "email": email,
+                "phone": phone,
                 "status": 500,
             },
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
     else:
-        if generate_code(user):
+        if generate_code(user, phone):
             return Response(
                 {
                     "message": "Code resent. Check your mail for code",
@@ -324,6 +349,44 @@ def enter_verification_code_view(request):
 
 
 @api_view(["POST", "GET"])
+def phone_number_view(request):
+    if request.method == "GET":
+        return render(request, "final_project/phone.html")
+
+    email = request.data.get("email")
+    phone = request.data.get("phone")
+
+    if email:
+        try:
+            user_found = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response(
+                {"message": "Email not found", "email": email, "status": 400},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        else:
+            if generate_code(user_found, phone):
+                return Response(
+                    {
+                        "message": "Check your mail for code",
+                        "email": email,
+                        "phone": phone,
+                        "status": 200,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+    else:
+        return Response(
+            {
+                "message": "Please provide email",
+                "email": email,
+                "status": 400,
+            },
+            status=status.HTTP_404_NOT_FOUND,
+        )
+
+
+@api_view(["POST", "GET"])
 def forgot_password_view(request):
     if request.method == "POST":
         email = request.data.get("email")
@@ -338,24 +401,23 @@ def forgot_password_view(request):
                 )
             else:
                 if user_found:
-                    if generate_code(user_found):
-                        return Response(
-                            {
-                                "message": "Check your mail for code",
-                                "email": email,
-                                "status": 200,
-                            },
-                            status=status.HTTP_200_OK,
-                        )
-                    else:
-                        return Response(
-                            {
-                                "message": "Could not generate code",
-                                "email": email,
-                                "status": 400,
-                            },
-                            status=status.HTTP_400_BAD_REQUEST,
-                        )
+                    return Response(
+                        {
+                            "message": "Check your mail for code",
+                            "email": email,
+                            "status": 200,
+                        },
+                        status=status.HTTP_200_OK,
+                    )
+        else:
+            return Response(
+                {
+                    "message": "Please provide email",
+                    "email": email,
+                    "status": 400,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
     else:
         return render(request, "final_project/forgot_password.html")
 
@@ -411,7 +473,6 @@ def login_view(request):
         username = request.data.get("username")
         password = request.data.get("password")
         user = authenticate(request, username=username, password=password)
-        print(username, password)  # Same output: test test
 
         # Check if authentication successful
         if user is not None:
@@ -513,8 +574,7 @@ def register(request):
                 try:
                     user = User.objects.create_user(username, email, password)
                     user.save()
-                except IntegrityError as e:
-                    print(e)
+                except IntegrityError:
                     return render(
                         request,
                         "final_project/register.html",
@@ -528,7 +588,6 @@ def register(request):
                     )
                 return redirect(reverse("index"))
         else:
-            print("Hssol")
             return redirect(reverse("index"))
     else:
         return render(request, "final_project/register.html")

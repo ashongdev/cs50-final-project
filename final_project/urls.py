@@ -10,6 +10,7 @@ urlpatterns = [
     path("create", views.create_new_note, name="create"),
     path("login", views.login_view, name="login"),
     path("forgot_password", views.forgot_password_view, name="forgot_password"),
+    path("phone_number", views.phone_number_view, name="phone_number"),
     path(
         "code",
         views.enter_verification_code_view,
