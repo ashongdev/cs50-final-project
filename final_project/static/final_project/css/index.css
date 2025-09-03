@@ -5,10 +5,10 @@
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Base body styling */
+
 .app-body {
-	background-color: #f7f7f7; /* replaces bg-gray-100 */
-	color: #1a1a1a; /* replaces text-gray-900 */
+	background-color: #f7f7f7; 
+	color: #1a1a1a; 
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0;
 	padding: 0;
@@ -20,43 +20,43 @@
 	display: flex;
 }
 
-/* Content area */
+
 #content {
 	width: 100%;
 	min-height: 100vh;
 }
 
-/* WebKit (Chrome, Edge, Safari, Opera) */
+
 * {
-	/* enable painting in nested scrollables too */
-	scrollbar-width: thin; /* harmless for WebKit; useful if viewed in Firefox */
+	
+	scrollbar-width: thin; 
 }
 
 *::-webkit-scrollbar {
-	width: 8px; /* keep it slim */
-	height: 8px; /* for horizontal bars */
+	width: 8px; 
+	height: 8px; 
 }
 
 *::-webkit-scrollbar-track {
-	background: transparent; /* almost invisible track */
+	background: transparent; 
 }
 
 *::-webkit-scrollbar-thumb {
 	background-clip: padding-box;
-	background-color: rgba(0, 0, 0, 0.18); /* subtle default */
+	background-color: rgba(0, 0, 0, 0.18); 
 	border-radius: 999px;
-	border: 2px solid transparent; /* creates some breathing room */
+	border: 2px solid transparent; 
 }
 
 *::-webkit-scrollbar-thumb:hover {
-	background-color: rgba(0, 0, 0, 0.28); /* slightly clearer on hover */
+	background-color: rgba(0, 0, 0, 0.28); 
 }
 
 *::-webkit-scrollbar-thumb:active {
-	background-color: rgba(0, 0, 0, 0.36); /* still restrained when dragging */
+	background-color: rgba(0, 0, 0, 0.36); 
 }
 
-/* ===== Optional: adapt to dark mode for better contrast ===== */
+
 @media (prefers-color-scheme: dark) {
 	html {
 		scrollbar-color: color-mix(in oklab, white 35%, transparent) transparent;
@@ -72,14 +72,14 @@
 	}
 }
 
-/* ===== If you only want to target a specific scroll area ===== */
-/* Replace `.scroll-area` with your element */
+
+
 .scroll-area {
-	scrollbar-gutter: stable; /* avoids layout shift when scrollbar appears */
+	scrollbar-gutter: stable; 
 	overflow: auto;
 }
 
-/* Layout */
+
 .app-body {
 	display: flex;
 	width: 100%;
@@ -88,7 +88,7 @@
 	font-family: sans-serif;
 }
 
-/* Sidebar */
+
 .sidebar {
 	border-right: 1px solid #e2e8f0;
 	width: 15rem;
@@ -103,7 +103,7 @@
 	font-weight: bold;
 }
 
-/* Tabs */
+
 .tabs {
 	margin-top: 1rem;
 	padding: 0.75rem 1rem;
@@ -127,7 +127,7 @@
 	background: rgba(0, 0, 0, 0.05);
 }
 
-/* Tags */
+
 .tags {
 	margin-top: 1rem;
 	padding: 0.75rem 1rem;
@@ -149,7 +149,7 @@
 	background: rgba(0, 0, 0, 0.05);
 }
 
-/* Main Layout */
+
 .main {
 	display: flex;
 	flex-direction: column;
@@ -157,7 +157,7 @@
 	height: 100%;
 }
 
-/* Header */
+
 .header {
 	display: flex;
 	justify-content: space-between;
@@ -198,14 +198,14 @@
 	cursor: pointer;
 }
 
-/* Layout grid */
+
 .layout {
 	display: grid;
 	grid-template-columns: 0.4fr 1fr 0.4fr;
 	height: 100%;
 }
 
-/* Notes sidebar */
+
 .notes-sidebar {
 	border-right: 1px solid #e2e8f0;
 	padding: 1rem;
@@ -300,7 +300,7 @@
 	color: #718096;
 }
 
-/* Editor */
+
 .editor {
 	padding: 1.25rem;
 }
@@ -374,7 +374,7 @@ textarea {
 	color: #6b7280;
 }
 
-/* Right Sidebar */
+
 .right-sidebar {
 	border-left: 1px solid #e2e8f0;
 	padding: 1rem;
@@ -402,14 +402,11 @@ textarea {
 	color: white;
 }
 
-/* ========================= */
-/* Responsive Layout Changes */
-/* ========================= */
 
-/* Tablets (<= 1024px) */
+
 @media (max-width: 1024px) {
 	.layout {
-		grid-template-columns: 1fr; /* stack all sections */
+		grid-template-columns: 1fr; 
 	}
 
 	.notes-sidebar {
@@ -432,10 +429,10 @@ textarea {
 	}
 }
 
-/* Mobile (<= 640px) */
+
 @media (max-width: 640px) {
 	.main-body {
-		flex-direction: column; /* sidebar moves on top */
+		flex-direction: column; 
 	}
 
 	.sidebar {
@@ -453,6 +450,6 @@ textarea {
 	}
 
 	.search-box input {
-		width: 100%; /* full width search bar */
+		width: 100%; 
 	}
 }
