@@ -95,7 +95,6 @@ def email(request, email_id):
         return JsonResponse({"error": "Email not found."}, status=404)
 
     # Return email contents
-    print(request.method)
     if request.method == "GET":
         email.read = True
         email.save()

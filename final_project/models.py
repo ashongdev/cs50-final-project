@@ -30,20 +30,9 @@ class Code(models.Model):
         return f"{self.pk}: {self.code} for {self.user.username} "
 
 
-# class IsArchived(models.Model):
-#     note_id = models.ForeignKey(to=Note, on_delete=models.CASCADE)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     is_archived = models.BooleanField(
-#         default=True
-#     )  # True because we only insert into this table when a note is archived, from then on, we just toggled `is_archived`
-
-
-# class IsDeleted(models.Model):
-#     note_id = models.ForeignKey(to=Note, on_delete=models.CASCADE)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     is_deleted = models.BooleanField(default=True)  # same idea as IsArchived
-
-
 class Tag(models.Model):
     note_id = models.ForeignKey(to=Note, on_delete=models.CASCADE)
     tag_name = models.TextField(blank=False, null=False)
+
+    def __str__(self):
+        return f"{self.pk}: NoteID: {self.note_id.pk} {self.tag_name} "

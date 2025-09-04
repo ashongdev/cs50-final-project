@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -146,6 +147,72 @@ def deleted(request):
         return render(request, "final_project/deleted.html", {"notes": all_notes})
     else:
         return redirect(reverse("login"))
+
+
+@api_view(["GET"])
+def search_view(request, search_word):
+    page = request.GET.get("page")
+
+    match page:
+        case "all":
+            ...
+    # Search notes
+    notes_search_results = Note.objects.filter(
+        (Q(title__icontains=search_word) | Q(content__icontains=search_word)),
+        author=request.user,
+    )
+
+    tags_search_results = Tag.objects.filter(
+        Q(tag_name__icontains=search_word), Q(note_id__author=request.user)
+    )
+
+    all_results = []
+
+    note_tags = Tag.objects.filter(note_id__author=request.user)
+    for search_result in tags_search_results:
+        note = Note.objects.get(id=search_result.note_id.pk)
+
+        each_notes_tag = set()
+        for tag in note_tags:
+            if search_result.note_id.pk == tag.note_id.pk:
+                each_notes_tag.add(tag.tag_name)
+        each_notes_tag = list(each_notes_tag)
+
+        all_results.append(
+            {
+                "id": note.pk,
+                "title": note.title,
+                "content": note.content,
+                "is_deleted": note.is_deleted,
+                "is_archived": note.is_archived,
+                "created_at": note.created_at,
+                "updated_at": note.updated_at,
+                "tags": each_notes_tag,
+            }
+        )
+
+    for search_result in notes_search_results:
+        # Build each notes tag
+        each_notes_tag = set()
+        for tag in note_tags:
+            if search_result.pk == tag.note_id.pk:
+                each_notes_tag.add(tag.tag_name)
+        each_notes_tag = list(each_notes_tag)
+
+        all_results.append(
+            {
+                "id": search_result.pk,
+                "title": search_result.title,
+                "content": search_result.content,
+                "is_deleted": search_result.is_deleted,
+                "is_archived": search_result.is_archived,
+                "created_at": search_result.created_at,
+                "updated_at": search_result.updated_at,
+                "tags": each_notes_tag,
+            }
+        )
+
+    return Response({"search_results": all_results})
 
 
 @api_view(["POST", "GET"])

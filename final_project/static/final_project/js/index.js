@@ -11,54 +11,107 @@ document.addEventListener("DOMContentLoaded", () => {
 	const urlParams = new URLSearchParams(window.location.search);
 	removeParam("note_id", urlParams);
 
-	const noteItems = document.querySelectorAll(".note-item");
+	const notesList = document.querySelector(".notes-list");
 
-	noteItems.forEach((note) => {
-		note.addEventListener("click", () => {
-			const noteId = note.dataset.noteId;
+	notesList.addEventListener("click", (e) => {
+		const note = e.target.closest(".note-item");
+		if (!note) return; // click wasn't on a note
 
-			const urlParams = new URLSearchParams(window.location.search);
-			const noteParamId = urlParams.get("note_id");
+		const noteId = note.dataset.noteId;
 
-			// Prevent unnecessary api calls
-			if (noteId === noteParamId) {
-				return;
-			}
+		const urlParams = new URLSearchParams(window.location.search);
+		const noteParamId = urlParams.get("note_id");
 
-			document.querySelector(".placeholder-text").style.display = "none";
-			document.querySelector(".toggle").style.display = "block";
-			document.querySelector(".right-sidebar").style.display = "flex";
+		if (noteId === noteParamId) return;
 
-			history.pushState("", null, `?note_id=${noteId}`);
+		document.querySelector(".placeholder-text").style.display = "none";
+		document.querySelector(".toggle").style.display = "block";
+		document.querySelector(".right-sidebar").style.display = "flex";
 
-			fetch(`/select_note/${noteId}`, {
-				method: "GET",
-				headers: { "Content-Type": "application/json" },
-				credentials: "include",
-			}).then((response) => {
-				response.json().then((result) => {
-					const title = document.querySelector(".editor-title");
-					const updatedAt = document.querySelector(".updated-at");
+		history.pushState("", null, `?note_id=${noteId}`);
 
-					const noteDetails = result.note_details;
-					title.innerHTML = noteDetails.title;
-					updatedAt.innerHTML = new Date(
-						noteDetails.updated_at
-					).toDateString();
+		fetch(`/select_note/${noteId}`, {
+			method: "GET",
+			headers: { "Content-Type": "application/json" },
+			credentials: "include",
+		}).then((response) => {
+			response.json().then((result) => {
+				const title = document.querySelector(".editor-title");
+				const updatedAt = document.querySelector(".updated-at");
 
-					const tags = document.querySelector(".meta-tags");
-					tags.innerHTML = "";
-					noteDetails.tags.forEach((tag, index) => {
-						tags.innerHTML += `${tag}${
-							index === noteDetails.tags.length - 1 ? "" : ", "
-						}`;
-					});
+				const noteDetails = result.note_details;
+				title.innerHTML = noteDetails.title;
+				updatedAt.innerHTML = new Date(
+					noteDetails.updated_at
+				).toDateString();
 
-					tinymce.activeEditor.setContent(noteDetails.content);
+				const tags = document.querySelector(".meta-tags");
+				tags.innerHTML = "";
+				noteDetails.tags.forEach((tag, index) => {
+					tags.innerHTML += `${tag}${
+						index === noteDetails.tags.length - 1 ? "" : ", "
+					}`;
 				});
+
+				tinymce.activeEditor.setContent(noteDetails.content);
 			});
 		});
 	});
+
+	const searchInput = document.getElementById("search");
+	searchInput &&
+		// searchInput.value &&
+		searchInput.addEventListener("keydown", (e) => {
+			if (e.key === "Enter") {
+				if (searchInput.value === "") {
+					window.location.reload();
+				}
+
+				fetch(
+					`/search/${
+						searchInput.value
+					}?page=${window.location.pathname.slice(1)}`,
+					{
+						method: "GET",
+						headers: { "Content-Type": "application/json" },
+					}
+				).then((response) => {
+					if (response.status === 200) {
+						response.json().then((result) => {
+							const notesList =
+								document.querySelector(".notes-list");
+
+							notesList.innerHTML = "";
+							if (result.search_results.length > 0) {
+								result.search_results.forEach((res) => {
+									notesList.innerHTML += `
+										<div
+											class="note-item"
+											data-note-id="${res.id}"
+										>
+											<div class="note-details">
+												<p class="note-title">${res.title}</p>
+												<div class="note-tags">
+													${res.tags.map(
+														(tag) =>
+															`<span class="note-tag">
+															${tag}
+														</span>`
+													)}
+												</div>
+												<p class="note-date">${new Date(res.updated_at).toDateString()}</p>
+											</div>
+										</div>
+									`;
+								});
+							} else {
+								notesList.innerHTML = "No search results";
+							}
+						});
+					}
+				});
+			}
+		});
 
 	const archiveBtn = document.querySelector(".archive");
 	archiveBtn &&
@@ -76,7 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 					setTimeout(() => {
 						window.location.reload();
-						console.log("HIE");
 					}, 100);
 				}
 			});
@@ -98,7 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 					setTimeout(() => {
 						window.location.reload();
-						console.log("HIE");
 					}, 100);
 				}
 			});
@@ -120,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 					setTimeout(() => {
 						window.location.reload();
-						console.log("HIE");
 					}, 100);
 				}
 			});
@@ -142,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 					setTimeout(() => {
 						window.location.reload();
-						console.log("HIE");
 					}, 100);
 				}
 			});
@@ -175,7 +224,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			const title = document.querySelector(".editor-title");
 			const tags = document.querySelector(".meta-tags");
 			const contentArea = tinymce.activeEditor.getContent("mytextarea");
-			console.log(contentArea);
 
 			fetch(`/save_note/${noteId}`, {
 				method: "POST",
@@ -191,17 +239,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				credentials: "include",
 			}).then((response) => {
 				if (response.ok) {
-					// alert("Saved");
-					// removeParam("note_id", urlParams);
-
 					setTimeout(() => {
 						window.location.reload();
-						console.log("HIE");
 					}, 100);
 				}
 			});
-
-			console.log("Submitted");
 		});
 
 	const editorTitleBtn = document.querySelector(".edit-title-btn");

@@ -18,6 +18,7 @@ urlpatterns = [
         name="code",
     ),
     path("set_new_password", views.set_new_password, name="set_new_password"),
+    path("search/<str:search_word>", views.search_view, name="search"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("request_code", views.request_code, name="request_code"),

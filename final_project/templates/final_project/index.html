@@ -37,7 +37,8 @@
                 <div class="user-controls">
                     <div class="search-box">
                         <input
-                            name="q"
+                            id="search"
+                            name="search"
                             type="text"
                             placeholder="Search by title, content, or tags..."
                         />
@@ -61,7 +62,6 @@
 
                     <div class="notes-list">
                         {% for note in notes %}
-                        {% comment %} href="?filter={{ request.GET.filter }}&note_id={{ note.id }}" {% endcomment %}
                         <div
                             class="note-item {% if note.is_active %}active{% endif %}"
                             data-note-id="{{ note.id }}"
@@ -87,7 +87,7 @@
                     <div class="toggle" style="display: none;">
                         <div class="editor-header">
                             <div class="title-cont" style="display: flex; justify-content: start; gap: 1rem; align-items: center;">
-                                <h1 class="editor-title">ddd</h1>
+                                <h1 class="editor-title"></h1>
                                 <span class="edit edit-title-btn">Edit</span>
 
                                 <div class="edit-title-cont" style="display: none">

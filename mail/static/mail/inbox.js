@@ -27,7 +27,7 @@ function submitForm() {
 
 	fetch("/mail/emails", {
 		method: "POST",
-		credentials:"include",
+		credentials: "include",
 		body: JSON.stringify({ recipients, subject, body }),
 	})
 		.then((response) => response.json())
@@ -78,7 +78,7 @@ function load_mailbox(mailbox) {
 
 	fetch(`/mail/emails/${mailbox}`, {
 		method: "GET",
-		credentials:"include",
+		credentials: "include",
 	})
 		.then((response) => response.json())
 		.then((result) => {
@@ -109,7 +109,7 @@ function viewEmail(id, mailbox) {
 	// Get emails
 	fetch(`/mail/emails/${id}`, {
 		method: "GET",
-		credentials:"include",
+		credentials: "include",
 	})
 		.then((response) => response.json())
 		.then((result) => {
@@ -130,65 +130,61 @@ function viewEmail(id, mailbox) {
                   </div>
                </div>`;
 
-				const buttonElem = document.createElement("button");
-				const buttonElem1 = document.createElement("button");
-				buttonElem1.innerText = "Reply";
-				buttonElem.innerText = result.archived
-					? "Unarchive"
-					: "Archive";
+			const buttonElem = document.createElement("button");
+			const buttonElem1 = document.createElement("button");
+			buttonElem1.innerText = "Reply";
+			buttonElem.innerText = result.archived ? "Unarchive" : "Archive";
 
-				mailbox !== "sent" && emailView.appendChild(buttonElem);
-				emailView.appendChild(buttonElem1);
+			mailbox !== "sent" && emailView.appendChild(buttonElem);
+			emailView.appendChild(buttonElem1);
 
-				const archiveValue = result.archived ? false : true;
-				buttonElem.addEventListener("click", () =>
-					archiveEmail(id, archiveValue)
-				);
+			const archiveValue = result.archived ? false : true;
+			buttonElem.addEventListener("click", () =>
+				archiveEmail(id, archiveValue)
+			);
 
-				buttonElem1.addEventListener("click", () => {
-					const composeView = document.querySelector("#compose-view");
+			buttonElem1.addEventListener("click", () => {
+				const composeView = document.querySelector("#compose-view");
 
-					composeView.style.display = "block";
-					emailView.style.display = "none";
-					emailsView.style.display = "none";
+				composeView.style.display = "block";
+				emailView.style.display = "none";
+				emailsView.style.display = "none";
 
-					let subject = document.querySelector("#compose-subject");
+				let subject = document.querySelector("#compose-subject");
 
-					document.querySelector("#compose-recipients").value =
-						result.sender;
+				document.querySelector("#compose-recipients").value =
+					result.sender;
 
-					if (result.subject.toLowerCase().startsWith("re:")) {
-						subject.value = `${result.subject}`;
-					} else {
-						console.log(result.subject);
-						subject.value = `Re: ${result.subject}`;
-					}
+				if (result.subject.toLowerCase().startsWith("re:")) {
+					subject.value = `${result.subject}`;
+				} else {
+					subject.value = `Re: ${result.subject}`;
+				}
 
-					document.querySelector(
-						"#compose-body"
-					).value = `On ${result.timestamp} ${result.sender} wrote:\n\n**${result.body}**`;
-				});
+				document.querySelector(
+					"#compose-body"
+				).value = `On ${result.timestamp} ${result.sender} wrote:\n\n**${result.body}**`;
+			});
 		});
 }
 
-	function getCookie(name) {
-		let cookieValue = null;
-		if (document.cookie && document.cookie !== "") {
-			const cookies = document.cookie.split(";");
-			for (let i = 0; i < cookies.length; i++) {
-				const cookie = cookies[i].trim();
-				// Does this cookie string begin with the name we want?
-				if (cookie.substring(0, name.length + 1) === name + "=") {
-					cookieValue = decodeURIComponent(
-						cookie.substring(name.length + 1)
-					);
-					break;
-				}
+function getCookie(name) {
+	let cookieValue = null;
+	if (document.cookie && document.cookie !== "") {
+		const cookies = document.cookie.split(";");
+		for (let i = 0; i < cookies.length; i++) {
+			const cookie = cookies[i].trim();
+			// Does this cookie string begin with the name we want?
+			if (cookie.substring(0, name.length + 1) === name + "=") {
+				cookieValue = decodeURIComponent(
+					cookie.substring(name.length + 1)
+				);
+				break;
 			}
 		}
-		return cookieValue;
 	}
-
+	return cookieValue;
+}
 
 function archiveEmail(id, archiveValue) {
 	fetch(`/mail/archive/${id}`, {

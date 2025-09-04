@@ -34,13 +34,7 @@
             <header class="header">
                 <h1 class="page-title">Archived</h1>
                 <div class="user-controls">
-                    <div class="search-box">
-                        <input
-                            name="q"
-                            type="text"
-                            placeholder="Search by title, content, or tags..."
-                        />
-                    </div>
+                    
                     {% if user.is_authenticated %}
                     <span class="welcome-text">Welcome, {{ user.username }}</span>
                     <a href="/logout"><button class="link-button">Logout</button></a>
